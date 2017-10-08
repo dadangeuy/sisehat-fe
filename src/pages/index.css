@@ -1,0 +1,24 @@
+header.head {
+    padding-top: 0px;
+    padding-bottom: 50px;
+    text-align: center;
+    color: white;
+    background: #00BCD4;
+}
+
+header.head img {
+    display: block;
+    margin: auto;
+}
+
+header.head h1 {
+    font-weight: 300;
+    font-size: 70px;
+    margin-bottom: 0px;
+    margin-top: 10px;
+}
+
+header.head h2 {
+    margin-top: 0px;
+    font-weight: 100;
+}

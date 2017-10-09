@@ -22,7 +22,7 @@ export default class Layout extends Component {
                 <AppBar
                     onLeftIconButtonTouchTap={this.openDrawer}
                     iconElementRight={<FlatButton label={"Masuk"} containerElement={<Link to={'/login'}/>}></FlatButton>}
-                    zDepth={false}
+                    zDepth={0}
                 />
                 <Drawer
                     docked={false}

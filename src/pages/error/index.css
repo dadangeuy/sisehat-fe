@@ -1,0 +1,10 @@
+header.error {
+    text-align: center;
+    color: white;
+    background: white;
+}
+
+header.error img {
+    display: block;
+    margin: auto;
+}

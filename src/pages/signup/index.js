@@ -36,9 +36,11 @@ export class Signup extends Component {
     updateTextField = (event) => {
         this.setState({[event.target.id]: event.target.value});
     };
+
     updateGender = (event, index, value) => {
         this.setState({gender: value});
     };
+
     updateBirthdate = (event, date) => {
         this.setState({birthdate: date});
     };

@@ -67,11 +67,12 @@ export default class Layout extends Component {
                     onRequestClose={this.handleRequestClose}
                     animation={PopoverAnimationVertical}
                 >
-                    <Menu>
+                    <Menu disableAutoFocus={true}>
                         <MenuItem>
                             <TextField
                                 id={'email'}
                                 onChange={this.updateTextField}
+                                value={this.state.email}
                                 hintText="e.g. frieda@pambudy.com"
                                 floatingLabelText="Email"
                                 floatingLabelFixed={true}
@@ -85,6 +86,7 @@ export default class Layout extends Component {
                             <TextField
                                 id={'password'}
                                 onChange={this.updateTextField}
+                                value={this.state.password}
                                 hintText="e.g. lovelove"
                                 floatingLabelText="Password"
                                 floatingLabelFixed={true}

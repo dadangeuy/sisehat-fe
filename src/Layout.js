@@ -68,21 +68,18 @@ export default class Layout extends Component {
                     animation={PopoverAnimationVertical}
                 >
                     <Menu disableAutoFocus={true}>
-                        <MenuItem>
+                        <MenuItem disabled={true}>
                             <TextField
                                 id={'email'}
                                 onChange={this.updateTextField}
                                 value={this.state.email}
-                                hintText="e.g. frieda@pambudy.com"
+                                hintText="e.g. freida@pambudy.com"
                                 floatingLabelText="Email"
                                 floatingLabelFixed={true}
                                 fullWidth={true}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                }}
                             />
                         </MenuItem>
-                        <MenuItem>
+                        <MenuItem disabled={true}>
                             <TextField
                                 id={'password'}
                                 onChange={this.updateTextField}
@@ -92,12 +89,11 @@ export default class Layout extends Component {
                                 floatingLabelFixed={true}
                                 type={'password'}
                                 fullWidth={true}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                }}
                             />
                         </MenuItem>
-                        <MenuItem primaryText="Login" style={{textAlign: 'center'}}/>
+                        <MenuItem disabled={true} style={{textAlign: 'center'}}>
+                            <FlatButton fullWidth={true} label="Login"/>
+                        </MenuItem>
                     </Menu>
                 </Popover>
                 <Drawer

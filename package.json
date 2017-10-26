@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "google-places-browser": "^1.0.0",
     "material-ui": "^0.19.3",
+    "material-ui-places": "^1.1.7",
     "react": "15",
     "react-dom": "15",
+    "react-location-picker": "^1.0.1",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.14"
+    "react-scripts": "1.0.14",
+    "search-google-geocode": "^0.0.13"
   },
   "scripts": {
     "start": "react-scripts start",

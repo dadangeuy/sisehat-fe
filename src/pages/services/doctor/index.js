@@ -4,7 +4,7 @@ import LinearProgress from 'material-ui/LinearProgress';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import GooglePlaceAutocomplete from 'material-ui-places';
-import geocoder from 'search-google-geocode';
+// import geocoder from 'search-google-geocode';
 import Places from 'google-places-browser/places';
 const places = Places(window.google);
 
@@ -15,7 +15,7 @@ export default class Doctor extends React.Component {
         super(props);
 
         this.state = {
-            ready: false,
+            ready: true,
             coords: {
                 lat: -7.279378,
                 lng: 112.791209
@@ -25,31 +25,31 @@ export default class Doctor extends React.Component {
             dataResult: []
         };
 
-        if (navigator && navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((pos) => {
-                const coords = pos.coords;
-                geocoder.reverseGeocode(coords.latitude, coords.longitude, (error, result) => {
-                        if (result[0]) {
-                            this.setState({
-                                address: result[0].formatted,
-                                coords: {
-                                    lat: coords.latitude,
-                                    lng: coords.longitude
-                                }
-                            });
-                        }
-                        this.setState({ready: true});
-                    },
-                    options
-                );
-            });
-        }
-        else {
-            this.setState({ready: true});
-        }
+        // finding user position currently not available due to HTTPS problems
+        // if (navigator && navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition((pos) => {
+        //         const coords = pos.coords;
+        //         geocoder.reverseGeocode(coords.latitude, coords.longitude, (error, result) => {
+        //                 if (result[0]) {
+        //                     this.setState({
+        //                         address: result[0].formatted,
+        //                         coords: {
+        //                             lat: coords.latitude,
+        //                             lng: coords.longitude
+        //                         }
+        //                     });
+        //                 }
+        //                 this.setState({ready: true});
+        //             },
+        //             options
+        //         );
+        //     });
+        // }
+        // else {
+        //     this.setState({ready: true});
+        // }
 
         this.onChange = this.onChange.bind(this);
-        this.handleUpdateInput = this.handleUpdateInput.bind(this);
         this.onAutoCompleteChange = this.onAutoCompleteChange.bind(this);
         this.onAutoCompleteRequest = this.onAutoCompleteRequest.bind(this);
         this.updateCoords = this.updateCoords.bind(this);
@@ -65,22 +65,6 @@ export default class Doctor extends React.Component {
             }
         });
     }
-
-    handleUpdateInput(value) {
-        this.setState({
-            address: value
-        });
-        if (value !== undefined && value !== '') {
-            geocoder.geocode(value, (error, result) => {
-                    this.setState({
-                        dataResult: result,
-                        data: result.map(result => result.formatted)
-                    });
-                },
-                options
-            );
-        }
-    };
 
     onAutoCompleteChange(value) {
         this.setState({address: value.target.value});

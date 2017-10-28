@@ -4,11 +4,12 @@ import LinearProgress from 'material-ui/LinearProgress';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import GooglePlaceAutocomplete from 'material-ui-places';
-// import geocoder from 'search-google-geocode';
 import Places from 'google-places-browser/places';
-const places = Places(window.google);
+import Dialog from 'material-ui/Dialog';
+import {DOCTOR_API} from "../../../api/apiEndpoint";
 
-const options = {language: 'id', region: 'ID'};
+let places = Places(window.google);
+let request = require('request');
 
 export default class Doctor extends React.Component {
     constructor(props) {
@@ -16,43 +17,25 @@ export default class Doctor extends React.Component {
 
         this.state = {
             ready: true,
+            openSearch: false,
+            openResult: false,
+            findDoctorSuccess: false,
             coords: {
                 lat: -7.279378,
                 lng: 112.791209
             },
-            address: "Institut Teknologi Sepuluh Nopember",
-            data: [],
-            dataResult: []
+            address: 'Institut Teknologi Sepuluh Nopember, Keputih, Sukolilo, Surabaya City, East Java 60117',
+            error: false
         };
-
-        // finding user position currently not available due to HTTPS problems
-        // if (navigator && navigator.geolocation) {
-        //     navigator.geolocation.getCurrentPosition((pos) => {
-        //         const coords = pos.coords;
-        //         geocoder.reverseGeocode(coords.latitude, coords.longitude, (error, result) => {
-        //                 if (result[0]) {
-        //                     this.setState({
-        //                         address: result[0].formatted,
-        //                         coords: {
-        //                             lat: coords.latitude,
-        //                             lng: coords.longitude
-        //                         }
-        //                     });
-        //                 }
-        //                 this.setState({ready: true});
-        //             },
-        //             options
-        //         );
-        //     });
-        // }
-        // else {
-        //     this.setState({ready: true});
-        // }
 
         this.onChange = this.onChange.bind(this);
         this.onAutoCompleteChange = this.onAutoCompleteChange.bind(this);
         this.onAutoCompleteRequest = this.onAutoCompleteRequest.bind(this);
         this.updateCoords = this.updateCoords.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleCloseResult = this.handleCloseResult.bind(this);
+        this.handleResponse = this.handleResponse.bind(this);
     }
 
 
@@ -86,7 +69,67 @@ export default class Doctor extends React.Component {
         });
     }
 
+    handleOpen() {
+        this.setState({
+            error: false,
+            openSearch: true
+        });
+        request.post({url: DOCTOR_API, timeout: 100000}, this.handleResponse);
+    };
+
+    handleResponse(error, response, body) {
+        if (error) this.setState({findDoctorSuccess: false, error: true});
+        else this.setState({findDoctorSuccess: true});
+        this.handleClose();
+    }
+
+    handleClose() {
+        this.setState({
+            openSearch: false,
+            openResult: true
+        });
+    };
+
+    handleCloseResult() {
+        this.setState({openResult: false});
+    }
+
     render() {
+        const searchDialog = <Dialog
+            modal={false}
+            open={this.state.openSearch}
+            contentStyle={{textAlign: 'center'}}
+        >
+            <img src={require('../../../images/ambulance.gif')} alt={'ambulance'} height={'500px'}/>
+            <p>Mencari Dokter disekitar lokasi anda...</p>
+        </Dialog>;
+
+        let resultDialog = <Dialog
+            open={this.state.openResult}
+            onRequestClose={this.handleCloseResult}
+            title={'Pencarian Gagal!'}
+        >
+            <p>Tidak ada dokter disekitar lokasi anda saat ini, silahkan coba beberapa saat lagi</p>
+        </Dialog>;
+        if (this.state.error) {
+            resultDialog = <Dialog
+                open={this.state.openResult}
+                onRequestClose={this.handleCloseResult}
+                title={'Server sedang dalam gangguan'}
+            >
+                <p>Layanan sedang dalam perbaikan, silahkan coba beberapa saat lagi</p>
+            </Dialog>
+        }
+        else if (this.state.findDoctorSuccess) {
+            resultDialog = <Dialog
+                open={this.state.openResult}
+                onRequestClose={this.handleCloseResult}
+                title={'Berhasil menemukan dokter!'}
+            >
+                <p>Dokter akan menghubungi anda beberapa saat lagi</p>
+            </Dialog>;
+        }
+
         if (this.state.ready) {
             return (
                 <div style={{textAlign: 'center'}}>
@@ -110,7 +153,9 @@ export default class Doctor extends React.Component {
                         radius={1}
                         zoom={17}
                     />
-                    <RaisedButton label={'Pesan'} primary={true} style={{margin: '10px'}}/>
+                    <RaisedButton label={'Pesan'} primary={true} onClick={this.handleOpen} style={{margin: '12px'}}/>
+                    {searchDialog}
+                    {resultDialog}
                 </div>
             );
         }
